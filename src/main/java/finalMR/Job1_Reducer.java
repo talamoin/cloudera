@@ -38,17 +38,66 @@ public class Job1_Reducer extends Reducer<Text, Text, Text, Text> {
 			ArrayList<Article>to_sort= new ArrayList<Article>();
 			// get the input_date passed in the terminals arguments by user
 			long input_date= ISO8601.toTimeMS(param);
-			Iterator<Text> val = value.iterator();
-			
+			//SIterator<Text> val = value.iterator();
+		
 			HashSet<String> outlin= new HashSet<String>();
 			String rank="", outlinks="";
-			
+			int i =0;
 			// get the first outlink from the list of values
-			while (val.hasNext()) {
-				String line=val.next().toString();
-				StringTokenizer tokenizer= new StringTokenizer(line,"[ \t]");
-				String str="";
+			for (Text valueText : value) {
+				i++;
+				System.out.println("value "+valueText.toString());
+				//context2.write(key, new Text("i\t"+i+valueText.toString()));
+				Article temp= new Article();
+	           String line = valueText.toString();
+				//StringTokenizer tokenizer= new StringTokenizer(line,"[ \t]");
+				String str="<begin>";
+				String []tokens=line.split(" ");
+				String str2="";
+				 boolean flag= true;
 				
+
+					System.out.println(key.toString()+" tokens.length "+tokens.length+" ; line"+line);
+						if(tokens.length>=0) {
+							System.out.println("first loop ");
+				rank=tokens[0];
+					
+						temp.setRank(rank);
+
+						str=str+0+tokens[0];
+						}
+						
+						if(tokens.length>=1) {
+
+							System.out.println("second loop ");
+						timestamp =tokens[1];
+						
+						temp.setTimestamp(timestamp);
+
+						str=str+1+tokens[1];
+						}
+						if(tokens.length>=2) {
+
+							System.out.println("third loop ");
+						str=str+2+tokens[2];
+						temp.setOutlinks(tokens[2]);
+						System.out.println(key.toString()+" ; "+tokens[2]);
+						str=str+"<end>";
+//						context2.write(key, new Text("HELLOOO"));
+						}
+						to_sort.add(temp);
+				//context2.write(key, new Text(str));
+					System.out.println(key.toString()+" "+temp.toString());
+						
+			}
+			if(to_sort.size()>0) {
+			Collections.sort(to_sort,Collections.reverseOrder());
+			//System.out.println(key.toString()+" "+to_sort.get(0).toString());
+			context2.write(key, new Text(to_sort.get(0).toString()));}
+				//if(temp.getTimestamp()!=null&&temp.)
+				//str2="<hello>"+temp.getTimestamp()+temp.getRank()+temp.getOutlinks()+"</hello>";
+				//context2.write(key, new Text(temp.getOutlinks()));
+				/*
 				if(tokenizer.hasMoreTokens())
 				timestamp=tokenizer.nextToken();
 
@@ -57,6 +106,7 @@ public class Job1_Reducer extends Reducer<Text, Text, Text, Text> {
 
 				if(tokenizer.hasMoreTokens()) {
 				outlinks=tokenizer.nextToken();
+				*/
 				
 				/*
 				String all[] = outlinks.split(",");
@@ -78,10 +128,11 @@ public class Job1_Reducer extends Reducer<Text, Text, Text, Text> {
 					*/
 				//Text w2= new Text(timestamp+" "+rank+" "+outlinks);
 				//context2.write(key,w2);
-				to_sort.add(new Article(timestamp,str));
-				context2.write(key, new Text (timestamp+"\t"+rank+"\t"+outlinks));
+			//	Article o=new Article(timestamp,outlinks);
+				//to_sort.add(o);
+				//context2.write(key, new Text (timestamp+" "+outlinks));
 				
-			}
+			
 			//if(to_sort.size()>0) {
 			//Collections.sort(to_sort,Collections.reverseOrder());
 			/*
@@ -137,7 +188,7 @@ public class Job1_Reducer extends Reducer<Text, Text, Text, Text> {
 			}
 			*/
 			
-		}
+		
 		}
 		catch (ParseException e) {
 

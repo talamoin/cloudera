@@ -9,7 +9,11 @@ import utils.ISO8601;
 
 public class Article implements Comparable <Article>{
 	String timestamp;
-	String outlinks ;
+	String outlinks="" ;
+	String rank;
+	public Article () {
+		
+	}
 	public Article(String timestamp, String outlinks) {
 		super();
 		this.timestamp = timestamp;
@@ -25,10 +29,17 @@ public class Article implements Comparable <Article>{
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
+
+	public void setRank(String rank) {
+		this.rank = rank;
+		}
 	public String getOutlinks() {
-		String s = "1.0\t";
-		s=s+outlinks;
-		return s;
+		//String s = "1.0\t";
+		//s=s+outlinks;
+		return outlinks;
+	}
+	public String getRank() {
+		return rank;
 	}
 	public void setOutlinks(String outlinks) {
 		this.outlinks = outlinks;
@@ -38,13 +49,13 @@ public class Article implements Comparable <Article>{
 		String thisx =this.timestamp;
 		String odate =o.timestamp;
 		try {
-			
+		if(!thisx.isEmpty()&&!odate.isEmpty()) {
 		long d1= ISO8601.toTimeMS(thisx);
 		long d2=ISO8601.toTimeMS(odate);
 		if(d1>d2)return 1;
 		else if (d1<d2) return -1;
 		else return 0;
-		
+		}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,6 +64,12 @@ public class Article implements Comparable <Article>{
 		
 		
 	}
+	@Override
+	public String toString() {
+		return   "1.0\t" + outlinks;
+	}
+	
+	
 	
 
 	

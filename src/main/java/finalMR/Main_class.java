@@ -59,7 +59,7 @@ public class Main_class extends Configured implements Tool {
 		if (!isCompleted)
 			return 1;
 		String lastResultPath = null;
-		/*
+		
 		// Run the second MapReduce Job, calculating new pageranks from existing values
 		// Run this job several times, with each iteration the pagerank value will
 		// become more accurate
@@ -78,10 +78,9 @@ public class Main_class extends Configured implements Tool {
 		if (!isCompleted)
 			return 1;
 		return 0;
-		*
-		*/
 		
-		return 0;
+		
+		
 	}
 
 	// Parsing MapReduce Job 1
@@ -99,8 +98,8 @@ public class Main_class extends Configured implements Tool {
 		parser_job.setMapperClass(Job1_Mapper.class);
 		
 		
-		parser_job.setMapperClass(Job1_Mapper.class);
-		parser_job.setCombinerClass(Job1_Reducer.class);
+		//parser_job.setMapperClass(Job1_Mapper.class);
+		//parser_job.setCombinerClass(Job1_Reducer.class);
 		parser_job.setReducerClass(Job1_Reducer.class);
 
 		
@@ -108,7 +107,7 @@ public class Main_class extends Configured implements Tool {
 		// Map -> Reducer -> Output
 		FileInputFormat.setInputPaths(parser_job, new Path(inputPath));
 		FileOutputFormat.setOutputPath(parser_job, new Path(outputPath));
-		parser_job.setReducerClass(Job1_Reducer.class);
+		//parser_job.setReducerClass(Job1_Reducer.class);
 		
 		
 

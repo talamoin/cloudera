@@ -72,10 +72,11 @@ class Job1_Mapper extends org.apache.hadoop.mapreduce.Mapper<LongWritable, Text,
 					
 				String stored="";
 				boolean first=true;
-				for(int i=0;i<mainarr.length;i++) {
+				for(int i=1;i<mainarr.length;i++) {
 					outlin.add(mainarr[i]);
 				}
 				Iterator<String> pg=outlin.iterator();
+				if(pg.hasNext()) {
 				while(pg.hasNext()) {
 					
 					if(!first)
@@ -83,8 +84,13 @@ class Job1_Mapper extends org.apache.hadoop.mapreduce.Mapper<LongWritable, Text,
 					stored=stored+pg.next();
 					first=false;
 				}
-					main="1.0\t"+stored;
+				
+					main=stored;
 					}
+				}
+				else {
+					main="";
+				}
 				}
 					catch (ParseException e) {
 						main="NONO";
@@ -106,15 +112,18 @@ class Job1_Mapper extends org.apache.hadoop.mapreduce.Mapper<LongWritable, Text,
 				// write the output for Job1_reducer.
 				else if (first_word.equals("TEXTDATA")) {
 					
-					if(main.equals("NONO")==false) {
-					// use article_name as key for the reducer
-					key_text.set(new String(article_name));
+					
+					if((main.equals("NONO")==false)&&(main.equals("")==false)) {
+						// use article_name as key for the reducer
+						key_text.set(new String(article_name));
 					
 					// append timestamp and main outlinks together, pass them as the value
-					value_text.set(new String(time_stamp + "\t" + main));
+					value_text.set(new String("1.0 "+time_stamp + " " + main.trim()));
+					System.out.println(key_text.toString()+" "+value_text.toString());
 					
 					context.write(key_text, value_text);
 					}
+					
 					
 				}
 

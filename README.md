@@ -58,8 +58,8 @@ The flow
 ---------
 Main Class --> Job1_Mapper --> Job1_Reducer --> Job2_Mapper --> Job2_Reducer --> Job3_Mapper  --> Final Output
 
-Please note that Page rank calculation is an iterative process and is run untill convergence which is defined by number of iteration.
-in order to achieve this, Job 2(Rank Calculator) has been made to execute as user defined number of iterations from the commandline(ideally 5).
+Please note that Page rank calculation is an iterative process and is runas defined by number of iteration from command line.
+Job 2(Rank Calculator) has been made to execute as user defined number of iterations from the commandline(5 as suggested in coure work).
 
 How to Execute
 ---------------
@@ -93,3 +93,5 @@ Performance
 4. We can simplify the task as much as possible before sending it to the Reducer.
 
 5. We have used String Tokenizer rather than String Split which improves performance.
+
+6. We are using HashSet in stead of looping to remove duplicates.

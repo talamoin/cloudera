@@ -22,15 +22,14 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-
 import java.io.IOException;
 
+import org.apache.hadoop.fs.*;
 
 public class Main_class extends Configured implements Tool {
 	public static String timestamp;
 	public static int numberOfRounds;
-	
-	// not correct
+
 	@Override
 	public int run(String[] args) throws Exception {
 		// Run the first MapReduce Job, parsing links from the large dump of wikipedia
@@ -40,26 +39,23 @@ public class Main_class extends Configured implements Tool {
 		} catch (NumberFormatException e) {
 			System.err.println("the number of iterations should be an integer");
 			return 1; // default value
-		}
-		catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			System.err.println("the correct format is hadoop InputPath OutputPath NumberOfIterations Timestamp ");
-	       
+
 			return 1;
 		}
 		timestamp = args[3];
-		
+
 		System.err.println(ISO8601.toTimeMS(timestamp));
-			
-		
+
 		boolean isCompleted = job1(args[0], args[1]);
 
-		//String path = args[1];
+		// String path = args[1];
 
-		
 		if (!isCompleted)
 			return 1;
 		String lastResultPath = null;
-		
+
 		// Run the second MapReduce Job, calculating new pageranks from existing values
 		// Run this job several times, with each iteration the pagerank value will
 		// become more accurate
@@ -67,56 +63,64 @@ public class Main_class extends Configured implements Tool {
 			String inPath = "iter" + runs;
 			lastResultPath = "iter" + (runs + 1);
 
-			isCompleted = runRankCalculator(inPath, lastResultPath);
+			isCompleted = job2(inPath, lastResultPath);
 
 			if (!isCompleted)
 				return 1;
 		}
 
-		isCompleted = runRankSorter(lastResultPath, "result");
-	
+		isCompleted = job3(lastResultPath, "result");
+
 		if (!isCompleted)
 			return 1;
 		return 0;
-		
-		
-		
+
 	}
 
 	// Parsing MapReduce Job 1
 	public boolean job1(String inputPath, String outputPath)
 			throws IOException, ClassNotFoundException, InterruptedException {
+
 		Configuration conf = new Configuration();
+
+		// delete previous intermediate output files if they exist
+		FileSystem hdfs = FileSystem.get(conf);
+
+		for (int i = 0; i <= numberOfRounds; i++) {
+			Path temp = new Path("iter" + i);
+			if (hdfs.exists(temp))
+				hdfs.delete(temp, true);
+
+		}
+		// delete previous output file if it exists
+		Path temp = new Path("result");
+		if (hdfs.exists(temp)) {
+			hdfs.delete(temp, true);
+		}
+
 		// add input to mapper reducer
 		conf.set("maintimestamp", Main_class.timestamp);
-		//
+
 		Job parser_job = Job.getInstance(conf, "parser");
 		parser_job.setJarByClass(Main_class.class);
 
 		parser_job.setOutputKeyClass(Text.class);
 		parser_job.setOutputValueClass(Text.class);
 		parser_job.setMapperClass(Job1_Mapper.class);
-		
-		
-		//parser_job.setMapperClass(Job1_Mapper.class);
-		//parser_job.setCombinerClass(Job1_Reducer.class);
-		parser_job.setReducerClass(Job1_Reducer.class);
 
-		
+		parser_job.setReducerClass(Job1_Reducer.class);
 
 		// Map -> Reducer -> Output
 		FileInputFormat.setInputPaths(parser_job, new Path(inputPath));
 		FileOutputFormat.setOutputPath(parser_job, new Path(outputPath));
-		//parser_job.setReducerClass(Job1_Reducer.class);
-		
-		
 
 		return parser_job.waitForCompletion(true);
-		
+
 	}
 
 	// Calculation MapReduce Job 2
-	private boolean runRankCalculator(String inputPath, String outputPath)
+	// page rank calculator
+	private boolean job2(String inputPath, String outputPath)
 			throws IOException, ClassNotFoundException, InterruptedException {
 		Configuration conf = new Configuration();
 
@@ -137,7 +141,8 @@ public class Main_class extends Configured implements Tool {
 	}
 
 	// Sorting and sanitization Map Job 3
-	private boolean runRankSorter(String inputPath, String outputPath)
+	//pageranksorter
+	private boolean job3(String inputPath, String outputPath)
 			throws IOException, ClassNotFoundException, InterruptedException {
 		Configuration conf = new Configuration();
 
@@ -145,8 +150,8 @@ public class Main_class extends Configured implements Tool {
 		rankOrdering.setJarByClass(Main_class.class);
 
 		// Input -> Mapper -> Map
-		rankOrdering.setOutputKeyClass(FloatWritable.class);
-		rankOrdering.setOutputValueClass(Text.class);
+		rankOrdering.setOutputKeyClass(Text.class);
+		rankOrdering.setOutputValueClass(FloatWritable.class);
 		rankOrdering.setMapperClass(Job3_Mapper.class);
 
 		FileInputFormat.setInputPaths(rankOrdering, new Path(inputPath));

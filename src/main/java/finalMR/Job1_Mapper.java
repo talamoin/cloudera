@@ -73,6 +73,7 @@ class Job1_Mapper extends org.apache.hadoop.mapreduce.Mapper<LongWritable, Text,
 				String stored="";
 				boolean first=true;
 				for(int i=1;i<mainarr.length;i++) {
+					if(mainarr[i].equals(article_name)==false)
 					outlin.add(mainarr[i]);
 				}
 				Iterator<String> pg=outlin.iterator();

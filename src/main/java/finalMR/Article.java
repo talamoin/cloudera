@@ -7,71 +7,76 @@ import com.amazonaws.thirdparty.joda.time.DateTime;
 
 import utils.ISO8601;
 
-public class Article implements Comparable <Article>{
+public class Article implements Comparable<Article> {
 	String timestamp;
-	String outlinks="" ;
+	String outlinks = "";
 	String rank;
-	public Article () {
-		
+
+	public Article() {
+
 	}
+
 	public Article(String timestamp, String outlinks) {
 		super();
 		this.timestamp = timestamp;
 		this.outlinks = outlinks;
 	}
+
 	public Article(String timestamp) {
 		super();
 		this.timestamp = timestamp;
-		}
+	}
+
 	public String getTimestamp() {
 		return timestamp;
 	}
+
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
 
 	public void setRank(String rank) {
 		this.rank = rank;
-		}
+	}
+
 	public String getOutlinks() {
-		//String s = "1.0\t";
-		//s=s+outlinks;
 		return outlinks;
 	}
+
 	public String getRank() {
 		return rank;
 	}
+
 	public void setOutlinks(String outlinks) {
 		this.outlinks = outlinks;
 	}
+
 	@Override
 	public int compareTo(Article o) {
-		String thisx =this.timestamp;
-		String odate =o.timestamp;
+		String thisx = this.timestamp;
+		String odate = o.timestamp;
 		try {
-		if(!thisx.isEmpty()&&!odate.isEmpty()) {
-		long d1= ISO8601.toTimeMS(thisx);
-		long d2=ISO8601.toTimeMS(odate);
-		if(d1>d2)return 1;
-		else if (d1<d2) return -1;
-		else return 0;
-		}
+			if (!thisx.isEmpty() && !odate.isEmpty()) {
+				long d1 = ISO8601.toTimeMS(thisx);
+				long d2 = ISO8601.toTimeMS(odate);
+				if (d1 > d2)
+					return 1;
+				else if (d1 < d2)
+					return -1;
+				else
+					return 0;
+			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 1;
-		
-		
+
 	}
+
 	@Override
 	public String toString() {
-		return   "1.0\t" + outlinks;
+		return "1.0\t" + outlinks;
 	}
-	
-	
-	
 
-	
-	
 }

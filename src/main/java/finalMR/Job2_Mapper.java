@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 public class Job2_Mapper extends Mapper<LongWritable, Text, Text, Text> {
 
     /**
-     * Job2_reducer takes output of the job1_reducer as its input.
+     * Job2_Mapper takes output of the job1_reducer as its input.
      * the reducer combines article_names (key) 
      * each key corresponds to values which is a list of outlinks with different dates.
      * The reducer gets the most updated article_name by comparing the dates with the input_date from the terminal
@@ -42,9 +42,10 @@ public class Job2_Mapper extends Mapper<LongWritable, Text, Text, Text> {
            
             context.write(new Text(page), new Text(sourcePage + "\t" + rank + "\t" + targetPageCount));
         }
+        System.out.println("second loop"+"!\t" + StringUtils.join(",", valueList));
    
-        context.write(new Text(sourcePage), new Text("!\t" + StringUtils.join(",", valueList)));
-
+        context.write(new Text(sourcePage), new Text("#\t" + StringUtils.join(",", valueList)));
+       
     }
 
 

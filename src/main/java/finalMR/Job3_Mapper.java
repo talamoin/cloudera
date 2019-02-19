@@ -9,7 +9,7 @@ import org.apache.hadoop.util.StringUtils;
 
 import java.io.IOException;
 
-public class Job3_Mapper extends Mapper<LongWritable, Text, FloatWritable, Text> {
+public class Job3_Mapper extends Mapper<LongWritable, Text,  Text,FloatWritable> {
 
     /**
      * The `map(...)` method is executed against each item in the input split. A key-value pair is
@@ -41,7 +41,9 @@ public class Job3_Mapper extends Mapper<LongWritable, Text, FloatWritable, Text>
             Float rankValue = Float.parseFloat(rank);
      //       System.out.println("Value:" + page);
             //Writing the rank and page to output
-            context.write(new FloatWritable(rankValue), new Text(page));
+           // context.write(new FloatWritable(rankValue), new Text(page));
+            context.write( new Text(page),new FloatWritable(rankValue));
+            
         }
 
     }

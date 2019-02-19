@@ -72,10 +72,9 @@ the date Y for which the PageRank scores will be computed (in ISO8601 format).
 Assumptions
 -------------
 
-1.We have asssumed enough memory in the system to store Reducer's Output as Reducer's ouput is stored locally as per HDFS architecture.
+1. We have asssumed enough memory in the system to store Reducer's Output as Reducer's ouput is stored locally as per HDFS architecture.
 
-2. The program is written for wiki data set in a multi line format and it is assumed that while running the program user enters command in same order
-as specified above.
+2. The program is written for wiki data set in a multi line format and it is assumed that while running the program user enters command in same orderas specified above.
 
 3. We have also asssumed that the input has lines starts with "MAIN", "REVISION" and "TEXTDATA".
 

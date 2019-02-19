@@ -12,6 +12,7 @@ import utils.ISO8601;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -151,7 +152,7 @@ public class Main_class extends Configured implements Tool {
 
 		// Input -> Mapper -> Map
 		rankOrdering.setOutputKeyClass(Text.class);
-		rankOrdering.setOutputValueClass(FloatWritable.class);
+		rankOrdering.setOutputValueClass(DoubleWritable.class);
 		rankOrdering.setMapperClass(Job3_Mapper.class);
 
 		FileInputFormat.setInputPaths(rankOrdering, new Path(inputPath));

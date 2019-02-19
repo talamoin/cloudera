@@ -39,7 +39,7 @@ public class Job2_Mapper extends Mapper<LongWritable, Text, Text, Text> {
         String targetPageCount = Integer.toString(valueList.size());
     
         for (String page : valueList) {
-           
+           System.out.println("first if"+sourcePage + "\t" + rank + "\t" + targetPageCount);
             context.write(new Text(page), new Text(sourcePage + "\t" + rank + "\t" + targetPageCount));
         }
         System.out.println("second loop"+"!\t" + StringUtils.join("##", valueList));

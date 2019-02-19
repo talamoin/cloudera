@@ -1,7 +1,8 @@
 package finalMR;
 
 
-import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.DoubleWritable;
+
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -9,7 +10,7 @@ import org.apache.hadoop.util.StringUtils;
 
 import java.io.IOException;
 
-public class Job3_Mapper extends Mapper<LongWritable, Text,  Text,FloatWritable> {
+public class Job3_Mapper extends Mapper<LongWritable, Text,  Text,DoubleWritable> {
 
     /**
      * The `map(...)` method is executed against each item in the input split. A key-value pair is
@@ -38,11 +39,11 @@ public class Job3_Mapper extends Mapper<LongWritable, Text,  Text,FloatWritable>
             page = fullList[0];
             rank = fullList[1];
       //      System.out.println("Key:" + rank);
-            Float rankValue = Float.parseFloat(rank);
+       Double rankValue = Double.parseDouble(rank);
      //       System.out.println("Value:" + page);
             //Writing the rank and page to output
            // context.write(new FloatWritable(rankValue), new Text(page));
-            context.write( new Text(page),new FloatWritable(rankValue));
+            context.write( new Text(page),new DoubleWritable(rankValue));
             
         }
 

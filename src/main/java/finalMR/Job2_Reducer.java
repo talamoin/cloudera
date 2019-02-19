@@ -43,7 +43,7 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 				if (strings.length >= 2 && !strings[1].equals("")) {
 
 					if (!firstSpecialCase) {
-						citedPages = citedPages + ",";
+						citedPages = citedPages + "##";
 					}
 					citedPages = citedPages + strings[1];
 				}

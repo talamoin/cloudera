@@ -81,7 +81,7 @@ class Job1_Mapper extends org.apache.hadoop.mapreduce.Mapper<LongWritable, Text,
 				while(pg.hasNext()) {
 					
 					if(!first)
-					stored += ",";
+					stored += "##";
 					stored=stored+pg.next();
 					first=false;
 				}

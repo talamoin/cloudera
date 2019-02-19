@@ -42,9 +42,9 @@ public class Job2_Mapper extends Mapper<LongWritable, Text, Text, Text> {
            
             context.write(new Text(page), new Text(sourcePage + "\t" + rank + "\t" + targetPageCount));
         }
-        System.out.println("second loop"+"!\t" + StringUtils.join(",", valueList));
+        System.out.println("second loop"+"!\t" + StringUtils.join("##", valueList));
    
-        context.write(new Text(sourcePage), new Text("#\t" + StringUtils.join(",", valueList)));
+        context.write(new Text(sourcePage), new Text("#\t" + StringUtils.join("##", valueList)));
        
     }
 
@@ -81,7 +81,7 @@ public class Job2_Mapper extends Mapper<LongWritable, Text, Text, Text> {
             if (fullList.length>=3&&!fullList[2].equals("")) {
                 page_list = fullList[2];
               
-                output_list.addAll(StringUtils.getStringCollection(page_list));
+                output_list.addAll(StringUtils.getStringCollection(page_list,"##"));
             }
           
         }

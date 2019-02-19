@@ -15,22 +15,26 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 
 		Text key = page;
 		Double rank = 0.0;
-		String citedPages = "";
+		String outlinks_of_targetPages = "";
 		Boolean firstSpecialCase = true;
 
 		Double dampingFactor = 0.85;
+		// 
 		for (Text valueText : values) {
 
 			String value = valueText.toString();
+			//if it starts with #:Strings 0 # character, String 1 outlinks 
+			//if it doesnt start with # : String 0 article_name , String 1 old rank  ,String 2 article_count 
 			String[] strings = value.split("\t");
 
-			// If its not a special case of '!'
+			//  adjust the initial guess
 			if (!strings[0].equals("#")) {
 				if (strings.length > 1 && strings[1] != null && !strings[1].equals("")) {
 
 					Double pagerank = Double.parseDouble(strings[1]);
 
 					int cites = Integer.parseInt(strings[2]);
+					
 					if (cites != 0) {
 
 						rank = rank + (pagerank / cites);
@@ -40,12 +44,13 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 			}
 
 			else {
+			
 				if (strings.length >= 2 && !strings[1].equals("")) {
 
 					if (!firstSpecialCase) {
-						citedPages = citedPages + "##";
+						outlinks_of_targetPages = outlinks_of_targetPages + "##";
 					}
-					citedPages = citedPages + strings[1];
+					outlinks_of_targetPages = outlinks_of_targetPages + strings[1];
 				}
 
 			}
@@ -55,8 +60,8 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 
 		Text opValue = new Text("");
 
-		if (citedPages != null && !citedPages.equals("")) {
-			opValue = new Text(rank + "\t" + citedPages);
+		if (outlinks_of_targetPages != null && !outlinks_of_targetPages.equals("")) {
+			opValue = new Text(rank + "\t" + outlinks_of_targetPages);
 		} else {
 			opValue = new Text(rank + "");
 		}

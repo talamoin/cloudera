@@ -25,89 +25,67 @@ public class Job2_Mapper extends Mapper<LongWritable, Text, Text, Text> {
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
 
-        List<String> valueList = getValues(value);
+    	//parse the outlinks and the values and convert them to an arrayList of string
+        List<String> valueList = new ArrayList<String>();
+        String r;
+        String k;
+        String outlinks_list;
+        //split based on tabs
+        String[] value_text = value.toString().split("\t");
+
+        
+        // check if it's not an empty list, and the first word is not an empty String
+        if (value_text.length >= 1 && value_text[0] != null) {
+            
+        	// take the first word (article name) and store it as the key
+            k = value_text[0];
+
+            // add the key to the list ??
+            valueList.add(k);
+         
+            //if it has more than two words, then consider the article name and the rank
+            if (value_text.length>=2&&!value_text[1].equals("")) {
+            	
+                r = value_text[1];
+               
+                valueList.add(r);
+            }
+            //if it has more than three words, then consider the article_name, the rank and outlinks
+           
+            if (value_text.length>=3&&!value_text[2].equals("")) {
+            	
+            	outlinks_list = value_text[2];
+              
+                valueList.addAll(StringUtils.getStringCollection(outlinks_list,"##"));
+            }
+          
+        }
+       
+        
+        
+        //
         if (valueList.isEmpty()) {
             return;
         }
         
-        Text sourcePage = new Text(valueList.get(0));
+        Text article_name = new Text(valueList.get(0));
         valueList.remove(0);
        
         String rank = valueList.get(0);
         valueList.remove(0);
        
-        String targetPageCount = Integer.toString(valueList.size());
+        String article_count = Integer.toString(valueList.size());
     
+        //for each page add a separate entry for the initial guess
         for (String page : valueList) {
-           System.out.println("first if"+sourcePage + "\t" + rank + "\t" + targetPageCount);
-            context.write(new Text(page), new Text(sourcePage + "\t" + rank + "\t" + targetPageCount));
+           System.out.println("first if"+article_name + "\t" + rank + "\t" + article_count);
+            context.write(new Text(page), new Text(article_name + "\t" + rank + "\t" + article_count));
         }
         System.out.println("second loop"+"!\t" + StringUtils.join("##", valueList));
-   
-        context.write(new Text(sourcePage), new Text("#\t" + StringUtils.join("##", valueList)));
+        //if it has outlinks, we added a special character "#" to check if this pages outlinks exist or not 
+        context.write(new Text(article_name), new Text("#\t" + StringUtils.join("##", valueList)));
        
     }
 
-
-/*
- * This method parses the rank and the outlinks value and converts it to an List   
- */
-    private static List<String> getValues(Text line) throws CharacterCodingException {
-
-        List<String> output_list = new ArrayList<String>();
-        String rank;
-        String key;
-        String page_list;
-        //split based on tabs
-        String[] fullList = line.toString().split("\t");
-
-        
-        // check if it's not an empty list, and the first word is not an empty String
-        if (fullList.length >= 1 && fullList[0] != null) {
-            
-        	// take the first word (article name) and store it as the key
-            key = fullList[0];
-
-            // add the key to the list ??
-            output_list.add(key);
-         
-            //if it has more than two words, then consider the article name and the rank
-            if (fullList.length>=2&&!fullList[1].equals("")) {
-                rank = fullList[1];
-               
-                output_list.add(rank);
-            }
-           
-            if (fullList.length>=3&&!fullList[2].equals("")) {
-                page_list = fullList[2];
-              
-                output_list.addAll(StringUtils.getStringCollection(page_list,"##"));
-            }
-          
-        }
-        /*
-        // check if it's not an empty list, and the first word is not an empty String
-        if (fullList.length >= 2 && fullList[0] != null) {
-            
-        	// take the first word (article name) and store it as the key
-            key = fullList[0];
-
-            // add the key to the list ??
-            output_list.add(key);
-            rank = fullList[1];
-            output_list.add(rank);
-            
-            //if it has outlinks, add them to the output list
-            if (fullList.length>=3&&!fullList[2].equals("")) {
-                page_list = fullList[2];
-              
-                //split based on comma, and add to the output list
-                output_list.addAll(StringUtils.getStringCollection(page_list));
-            }
-          
-        }
-        */
-        return output_list;
-
-    }
+  
 }

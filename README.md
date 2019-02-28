@@ -28,11 +28,12 @@ for example:
 hadoop finalMR.Main_class /user/enwiki/enwiki-20080103-sample.txt iter 5 2008-01-01T00:00:00Z
 ~~~~
 
-#### The final output will be stored in a file called result
-
 User should enter execute in the terminal in the following order :
-input file path, intermediate output path, number of iterations for the PageRank algorithm (integer >= 1),
-the date Y for which the PageRank scores will be computed (in ISO8601 format).
+1. input file path
+2. intermediate output path
+3. number of iterations for the PageRank algorithm (integer >= 1),
+4. the date Y for which the PageRank scores will be computed (in ISO8601 format).
+#### PLEASE NOTE: The final output will be stored in a file called result
 
 
 

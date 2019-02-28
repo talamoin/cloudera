@@ -30,12 +30,14 @@ import org.apache.hadoop.fs.*;
 public class Main_class extends Configured implements Tool {
 	public static String timestamp;
 	public static int numberOfRounds;
+	public static String filename="";
 
 	@Override
 	public int run(String[] args) throws Exception {
-		// Run the first MapReduce Job, parsing links from the large dump of wikipedia
+		// Run the first MapReduce Job, parsing links from the large dump of Wikipedia
 		// pages
 		try {
+			filename=args[1];
 			numberOfRounds = Integer.parseInt(args[2]);
 		} catch (NumberFormatException e) {
 			System.err.println("the number of iterations should be an integer");
@@ -61,8 +63,8 @@ public class Main_class extends Configured implements Tool {
 		// Run this job several times, with each iteration the pagerank value will
 		// become more accurate
 		for (int runs = 0; runs < numberOfRounds; runs++) {
-			String inPath = "iter" + runs;
-			lastResultPath = "iter" + (runs + 1);
+			String inPath = filename + runs;
+			lastResultPath = filename + (runs + 1);
 
 			isCompleted = job2(inPath, lastResultPath);
 
@@ -88,7 +90,7 @@ public class Main_class extends Configured implements Tool {
 		FileSystem hdfs = FileSystem.get(conf);
 
 		for (int i = 0; i <= numberOfRounds; i++) {
-			Path temp = new Path("iter" + i);
+			Path temp = new Path(filename + i);
 			if (hdfs.exists(temp))
 				hdfs.delete(temp, true);
 

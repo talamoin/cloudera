@@ -52,7 +52,7 @@ public class Job1_Reducer extends Reducer<Text, Text, Text, Text> {
 				
 			    //split the current value to get an array of tokens
 				String[] tokens = line.split(" ");
-				String str2 = "";
+				String str = "";
 				boolean flag = true;
 				
 				

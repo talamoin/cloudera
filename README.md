@@ -5,48 +5,80 @@ it contains a Mapper class,Reducer class and a driver class which drives these c
 
 Goal
 ------
-Implement Page Rank alorithm as descibed below.
+Implement Page Rank algorithm as descibed below.
 Dataset : parsed version of Wikipedia Edit History in a tagged multi line format.
 Output : print article name followed by their Page Rank (separate line for each article).
 Format : Text (being written to a file)
 
-Our Solution :
+
+How to Execute
+---------------
+~~~~
+mvn clean package
+
+export HADOOP_CLASSPATH="$PWD/target/uog-bigdata-0.0.1-SNAPSHOT.jar"
+
+
+hadoop finalMR.Main_class [INPUT_FILE] [Intermediate_output] [#_OF_ITERATION] [Timestamp_ISO8601 format]
+
+for example:
+hadoop finalMR.Main_class /user/enwiki/enwiki-20080103-sample.txt iter 5 2008-01-01T00:00:00Z
+~~~~
+
+#### The final output will be stored in a file called result
+
+User should enter execute in the terminal in the following order :
+input file path, intermediate output path, number of iterations for the PageRank algorithm (integer >= 1),
+the date Y for which the PageRank scores will be computed (in ISO8601 format).
+
+
 
 Class Description
 ------------------------
-Job1_Mapper - 
+## Job1_Mapper - Parser
 
-Key : Article_name and Value : Initial Rank(1.0)+Outlinks+timestamp appended together
+### Key : serializable int 
+### Value :line by line from input text
 
-Parser Mapper which reads input from file line by line.The input is split based on white spaces and tabs using a string Tokenizer 
-which performs better than normal Split.
+Read Input File line by line, Compare timestamps, send only revisions with timestamp before the input date 
 
-Job1_Reducer - 
+## Job1: Parser
 
-Key : Article_name and Value : Initial Rank(1.0)+Outlinks
+## Job1_Reducer
+Input:
+### Key : Article_name
+### Value : Initial Rank(1.0)+Outlinks+timestamp
 
 Parser Reducer emits key value pair.
 the reducer also combines article_names (key) each key corresponds to values which is a list of outlinks with different dates. 
 The reducer gets the most updated article_name by comparing the dates with the input_date from the terminal
 
-Job2_Mapper -
+## Job2: Rank Calculations
 
-Key : Article_name  and Value : Outlinks
+## Job2_Mapper 
+Input:
+### Key : Article_name  
+### Value : Outlinks for the recent outlinks before timestamp
 
-Rank Calculation Mapper class whose ouput is being fed into Job2_Mapper also which parses the rank and the 
-outlinks value and converts it to a List
 
-Job2_Reducer -
 
-Key : Article_name and Value :
+## Job2_Reducer  
+
+### Key : Article_name
+### Value : if it starts with # :Strings 0 # character, String 1 outlinks
+	### if it doesnt start with # : String 0 article_name , String 1 old rank ,String 2 article_count
 
 Rank Calculation Reducer class which calculates Page Rank based considering damping factor 0.85.
 
-Job3_Mapper - 
+## Job3: Output
+## Job3_Mapper - 
 
-Key :  and Value : 
+### Key : Article_name 
+### Value : Rank written by the context object
 
-This class is for Sorting and sanitization.
+This class is for Sorting (based on article name ) and sanitization. the output is written as <article name, rank>  
+
+
 
 Article - This class acts as getter and setter for timestamp and outlinks.
 
@@ -60,14 +92,6 @@ Main Class --> Job1_Mapper --> Job1_Reducer --> Job2_Mapper --> Job2_Reducer -->
 
 Please note that Page rank calculation is an iterative process and is runas defined by number of iteration from command line.
 Job 2(Rank Calculator) has been made to execute as user defined number of iterations from the commandline(5 as suggested in coure work).
-
-How to Execute
----------------
-clean maven using mvn clean package
-
-User should enter execute in the terminal in the following order :
-input file path, output path,(assumed non-existent), number of iterations for the PageRank algorithm (integer >= 1),
-the date Y for which the PageRank scores will be computed (in ISO8601 format).
 
 Assumptions
 -------------
@@ -95,3 +119,5 @@ Performance
 5. We have used String Tokenizer rather than String Split which improves performance.
 
 6. We are using HashSet in stead of looping to remove duplicates.
+
+7. The number of reducers should not be static

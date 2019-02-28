@@ -79,9 +79,13 @@ This can have two values:
 For each outlink, add the amount of that page's contribution
 calculates Page Rank uses a damping factor (alpha) 0.85. 
 
-<img src="http://www.sciweavers.org/tex2img.php?eq=rank%20%3D%20%20%5Cfrac%20%7B%5Calpha%7D%7BN%7D%20%2B%281-%20%5Calpha%20%29%20%20%5CSigma%20%20%5Cfrac%7Brank%7D%7BN%7D%20&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="rank =  \frac {\alpha}{N} +(1- \alpha )  \Sigma  \frac{rank}{N} " width="214" height="43" />
+for each iteration, the contributions are calculated and the ranks are recalculated based on those contributions. The algorithm has 4 steps: 
 
-
+  1- Start the algorithm with each page at rank 1  
+  2- Calculate URL contribution: contrib = rank/size 
+  3- Set each URL new rank = 0.15 + 0.85 x contrib 
+  4- Iterate to step 2 with the new rank
+  
 ## Job3: Output
 ### Job3_Mapper  
 Input:

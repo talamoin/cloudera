@@ -77,14 +77,12 @@ This can have two values:
 2. An Article name with the contribution: if it doesnt start with # : String 0 article_name, String 1 old rank ,String 2 article_count
 
 For each outlink, add the amount of that page's contribution
-calculates Page Rank uses a damping factor (alpha) 0.85. 
+calculates Page Rank uses a damping factor (alpha) 0.85. the contributions are calculated and the ranks are recalculated based on those contributions. The algorithm has 4 steps: 
 
-for each iteration, the contributions are calculated and the ranks are recalculated based on those contributions. The algorithm has 4 steps: 
-
-  1- Start the algorithm with each page at rank 1  
-  2- Calculate URL contribution: contrib = rank/size 
-  3- Set each URL new rank = 0.15 + 0.85 x contrib 
-  4- Iterate to step 2 with the new rank
+1. Start the algorithm with each page at rank 1  
+2. Calculate URL contribution: contrib = rank/size 
+3. Set each URL new rank = 0.15 + 0.85 x contrib 
+4. Iterate to step 2 with the new rank
   
 ## Job3: Output
 ### Job3_Mapper  

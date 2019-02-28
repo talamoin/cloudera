@@ -29,7 +29,8 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 		Boolean firstHash = true;
 
 		Double dampingFactor = 0.85;
-		//
+		//for each page calculate the pages contribution with an outlink to this page (inlinks)
+
 		for (Text valueText : values) {
 
 			String value = valueText.toString();
@@ -41,12 +42,15 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 			if (!strings[0].equals("#")) {
 				if (strings.length > 1 && strings[1] != null && !strings[1].equals("")) {
 
+					//get rank
 					Double pagerank = Double.parseDouble(strings[1]);
 
+					//getting number of citations
 					int cites = Integer.parseInt(strings[2]);
 
 					if (cites != 0) {
-
+						//add the contrib to the rank, a page is important if its pointed to 
+						//other important pages
 						rank = rank + (pagerank / cites);
 					}
 				}
@@ -65,7 +69,8 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 
 			}
 		}
-         
+        
+        //update the rank taking into consideration the damping factor
 		rank = (1 - dampingFactor) + (dampingFactor * (rank));
 
 		Text opValue = new Text("");

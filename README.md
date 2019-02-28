@@ -22,7 +22,7 @@ export HADOOP_CLASSPATH="$PWD/target/uog-bigdata-0.0.1-SNAPSHOT.jar"
 hadoop finalMR.Main_class [INPUT_FILE] [Intermediate_output] [#_OF_ITERATION] [Timestamp_ISO8601 format]
 
 for example:
-hadoop finalMR.Main_class /user/enwiki/enwiki-20080103-sample.txt iter0 5 2008-01-01T00:00:00Z
+hadoop finalMR.Main_class /user/enwiki/enwiki-20080103-sample.txt iter 5 2008-01-01T00:00:00Z
 ~~~~
 
 #### The final output will be stored in a file called result

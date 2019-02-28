@@ -13,28 +13,38 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 	@Override
 	public void reduce(Text page, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
+		
+		/**
+		 * The aim of job2 is to calculate the page rank for each article.
+		 * Job2_Reducer takes output of the job1_reducer as its input.
+		 *  key: article_name Value : rank and outlinks
+		 *  this class counts number of outlinks and check for nodes with no outlinks.
+		 * 
+		 * 
+		 */
+		
 		Text key = page;
 		Double rank = 0.0;
 		String outlinks_of_targetPages = "";
-		Boolean firstSpecialCase = true;
+		Boolean firstHash = true;
 
 		Double dampingFactor = 0.85;
-		// 
+		//
 		for (Text valueText : values) {
 
 			String value = valueText.toString();
-			//if it starts with #:Strings 0 # character, String 1 outlinks 
-			//if it doesnt start with # : String 0 article_name , String 1 old rank  ,String 2 article_count 
+			// if it starts with # :Strings 0 # character, String 1 outlinks
+			// if it doesnt start with # : String 0 article_name , String 1 old rank ,String 2 article_count
 			String[] strings = value.split("\t");
 
-			//  adjust the initial guess
+			// adjust the initial guess
 			if (!strings[0].equals("#")) {
 				if (strings.length > 1 && strings[1] != null && !strings[1].equals("")) {
 
 					Double pagerank = Double.parseDouble(strings[1]);
 
 					int cites = Integer.parseInt(strings[2]);
-					
+
 					if (cites != 0) {
 
 						rank = rank + (pagerank / cites);
@@ -44,10 +54,10 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 			}
 
 			else {
-			
+
 				if (strings.length >= 2 && !strings[1].equals("")) {
 
-					if (!firstSpecialCase) {
+					if (!firstHash) {
 						outlinks_of_targetPages = outlinks_of_targetPages + "##";
 					}
 					outlinks_of_targetPages = outlinks_of_targetPages + strings[1];
@@ -55,7 +65,7 @@ public class Job2_Reducer extends Reducer<Text, Text, Text, Text> {
 
 			}
 		}
-
+         
 		rank = (1 - dampingFactor) + (dampingFactor * (rank));
 
 		Text opValue = new Text("");

@@ -1,6 +1,5 @@
 package finalMR;
 
-
 import org.apache.hadoop.io.DoubleWritable;
 
 import org.apache.hadoop.io.LongWritable;
@@ -10,44 +9,40 @@ import org.apache.hadoop.util.StringUtils;
 
 import java.io.IOException;
 
-public class Job3_Mapper extends Mapper<LongWritable, Text,  Text,DoubleWritable> {
+public class Job3_Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable> {
 
-    /**
-     * The `map(...)` method is executed against each item in the input split. A key-value pair is
-     * mapped to another, intermediate, key-value pair.
-     * <p/>
-     * Specifically, this method should take Text objects in the form:
-     * `"[page]    [finalPagerank]    outLinkA,outLinkB,outLinkC..."`
-     * discard the outgoing links, parse the pagerank to a float and map each page to its rank.
-     * <p/>
-     * Note: The output from this Mapper will be sorted by the order of its keys.
-     *
-     * @param key     the key associated with each item output from {@link uk.ac.ncl.cs.csc8101.hadoop.calculate.RankCalculateReducer RankCalculateReducer}
-     * @param value   the text value "[page]  [finalPagerank]   outLinkA,outLinkB,outLinkC..."
-     * @param context Mapper context object, to which key-value pairs are written
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    @Override
-    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+	/**
+	 * The map method is executed against each item in the input split. A key-value
+	 * pair is mapped to another, intermediate, key-value pair. This method takes
+	 * value: article_name, finalPageRank, list of outlinks the outgoing links are
+	 * discarded each page is mapped with a rank which is Double The output from
+	 * this Mapper is sorted by article_name ie the key
+	 * key: article_name
+	 * value: rank is written by the context object
+	 */
+	@Override
+	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-    	
-        String rank = "0.0";
-        String page;
-        String[] fullList = value.toString().split("\t");
-        if (fullList.length >= 2 && !fullList[0].equals("") && !fullList[1].equals("")) {
-            page = fullList[0];
-            rank = fullList[1];
-      //      System.out.println("Key:" + rank);
-       Double rankValue = Double.parseDouble(rank);
-     //       System.out.println("Value:" + page);
-            //Writing the rank and page to output
-           // context.write(new FloatWritable(rankValue), new Text(page));
-            context.write( new Text(page),new DoubleWritable(rankValue));
-            
-        }
+		String rank = "0.0";
+		String article_name;
 
-    }
+		// split the values based on tabs
+		String[] value_text = value.toString().split("\t");
 
+		// check if length of values is greater than 2 and th rank and article_name is
+		// not null
+		if (value_text.length >= 2 && !value_text[0].equals("") && !value_text[1].equals("")) {
+			//article_name is the first value 
+			//rank is the second value
+			article_name = value_text[0];
+			rank = value_text[1];
+
+			Double rankValue = Double.parseDouble(rank);
+            //write articlename and rank to the file
+			context.write(new Text(article_name), new DoubleWritable(rankValue));
+
+		}
+
+	}
 
 }

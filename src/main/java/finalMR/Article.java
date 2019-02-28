@@ -2,12 +2,16 @@ package finalMR;
 
 import java.text.ParseException;
 import java.util.HashSet;
-
 import com.amazonaws.thirdparty.joda.time.DateTime;
-
 import utils.ISO8601;
 
 public class Article implements Comparable<Article> {
+	
+
+	/* This is a setter-getter class
+	* This is used to set and get 3 objects;  timestamp, outlinks,rank
+	* this class also implements compareto method that compares timestamps
+	*/
 	String timestamp;
 	String outlinks = "";
 	String rank;

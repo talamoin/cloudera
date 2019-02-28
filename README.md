@@ -16,14 +16,14 @@ Class Description
 ------------------------
 Job1_Mapper - 
 
-Key : Article_name and Value : Initial Rank(1.0)+Outlinks+timestamp appended together
+Key : serializable int and Value :line by line from input text
 
 Parser Mapper which reads input from file line by line.The input is split based on white spaces and tabs using a string Tokenizer 
 which performs better than normal Split.
 
 Job1_Reducer - 
 
-Key : Article_name and Value : Initial Rank(1.0)+Outlinks
+Key : Article_name and Value : Initial Rank(1.0)+Outlinks+timestamp
 
 Parser Reducer emits key value pair.
 the reducer also combines article_names (key) each key corresponds to values which is a list of outlinks with different dates. 
@@ -31,20 +31,21 @@ The reducer gets the most updated article_name by comparing the dates with the i
 
 Job2_Mapper -
 
-Key : Article_name  and Value : Outlinks
+Key : Article_name  and Value : Outlinks for the recent outlinks before timestamp
 
 Rank Calculation Mapper class whose ouput is being fed into Job2_Mapper also which parses the rank and the 
 outlinks value and converts it to a List
 
 Job2_Reducer -
 
-Key : Article_name and Value :
+Key : Article_name and Value : // if it starts with # :Strings 0 # character, String 1 outlinks
+		                          	// if it doesnt start with # : String 0 article_name , String 1 old rank ,String 2 article_count
 
 Rank Calculation Reducer class which calculates Page Rank based considering damping factor 0.85.
 
 Job3_Mapper - 
 
-Key :  and Value : 
+Key : Article_name  and Value : rank written by the context object
 
 This class is for Sorting and sanitization.
 
@@ -64,6 +65,9 @@ Job 2(Rank Calculator) has been made to execute as user defined number of iterat
 How to Execute
 ---------------
 clean maven using mvn clean package
+
+export HADOOP_CLASSPATH="$PWD/target/uog-bigdata-0.0.1-SNAPSHOT.jar"
+hadoop finalMR.Main_class /user/enwiki/enwiki-20080103-sample.txt iter0 5 2008-01-01T00:00:00Z
 
 User should enter execute in the terminal in the following order :
 input file path, output path,(assumed non-existent), number of iterations for the PageRank algorithm (integer >= 1),

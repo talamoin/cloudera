@@ -55,9 +55,7 @@ Input:
 #### Key : Article_name
 #### Value : Initial Rank(1.0)+Outlinks+timestamp
 
-Parser Reducer emits key value pair.
-the reducer also combines article_names (key) each key corresponds to values which is a list of outlinks with different dates. 
-The reducer gets the most updated article_name by comparing the dates with the input_date from the terminal
+This reducer combines all the revisions with the same article_name, into a list, sorts it and selects the most recent one
 
 ## Job2: Rank Calculations
 
@@ -65,7 +63,9 @@ The reducer gets the most updated article_name by comparing the dates with the i
 Input:
 #### Key : Article_name  
 #### Value : Outlinks for the recent outlinks before timestamp
-
+This job formats the input for the Job2_Reducer,
+Send the article_name with the rank so far, each line represents a seperate entry
+if the page has outlinks, send the 'original' outlinks along with it, this makes it easier for the last job to format the output
 
 
 ### Job2_Reducer  
@@ -73,10 +73,12 @@ Input:
 #### Key : Article_name
 #### Value : 
 This can have two values:
-1. List of outlinks :if it starts with #: Strings 0 # character, String 1 outlinks
-2. An Article name with the contribution: if it doesnt start with # : String 0 article_name , String 1 old rank ,String 2 article_count
+1. List of outlinks :if it starts with #: Strings 0: '#' , String 1:outlinks
+2. An Article name with the contribution: if it doesnt start with # : String 0 article_name, String 1 old rank ,String 2 article_count
 
-Rank Calculation: class which calculates Page Rank uses a damping factor 0.85.
+For each outlink, add the amount of that page's contribution
+calculates Page Rank uses a damping factor 0.85.
+<img src="http://www.sciweavers.org/tex2img.php?eq=rank%20%3D%20%20%5Cfrac%20%7B%5Calpha%7D%7BN%7D%20%2B%281-%20%5Calpha%20%29%20%20%5CSigma%20%20%5Cfrac%7Brank%7D%7BN%7D%20&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="rank =  \frac {\alpha}{N} +(1- \alpha )  \Sigma  \frac{rank}{N} " width="214" height="43" />
 
 ## Job3: Output
 ### Job3_Mapper  

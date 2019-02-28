@@ -5,7 +5,7 @@ it contains a Mapper class,Reducer class and a driver class which drives these c
 
 Goal
 ------
-Implement Page Rank alorithm as descibed below.
+Implement Page Rank algorithm as descibed below.
 Dataset : parsed version of Wikipedia Edit History in a tagged multi line format.
 Output : print article name followed by their Page Rank (separate line for each article).
 Format : Text (being written to a file)
@@ -43,8 +43,9 @@ Class Description
 Read Input File line by line, Compare timestamps, send only revisions with timestamp before the input date 
 
 ## Job1: Parser
-## Job1_Reducer
 
+## Job1_Reducer
+Input:
 ### Key : Article_name
 ### Value : Initial Rank(1.0)+Outlinks+timestamp
 
@@ -55,12 +56,11 @@ The reducer gets the most updated article_name by comparing the dates with the i
 ## Job2: Rank Calculations
 
 ## Job2_Mapper 
-
+Input:
 ### Key : Article_name  
 ### Value : Outlinks for the recent outlinks before timestamp
 
-Rank Calculation Mapper class whose ouput is being fed into Job2_Mapper also which parses the rank and the 
-outlinks value and converts it to a List
+
 
 ## Job2_Reducer  
 
@@ -70,6 +70,7 @@ outlinks value and converts it to a List
 
 Rank Calculation Reducer class which calculates Page Rank based considering damping factor 0.85.
 
+## Job3: Output
 ## Job3_Mapper - 
 
 ### Key : Article_name 

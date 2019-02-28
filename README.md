@@ -21,10 +21,10 @@ mvn clean package
 
 export HADOOP_CLASSPATH="$PWD/target/uog-bigdata-0.0.1-SNAPSHOT.jar"
 
-
 hadoop finalMR.Main_class [INPUT_FILE] [Intermediate_output] [#_OF_ITERATION] [Timestamp_ISO8601 format]
 
-for example:
+//for example:
+
 hadoop finalMR.Main_class /user/enwiki/enwiki-20080103-sample.txt iter 5 2008-01-01T00:00:00Z
 ~~~~
 
@@ -43,7 +43,7 @@ Class Description
 ## Job1: Parser
 
 ### Job1_Mapper
-
+Input
 #### Key : serializable int 
 #### Value :line by line from input text
 
@@ -69,7 +69,7 @@ Input:
 
 
 ### Job2_Reducer  
-
+Input:
 #### Key : Article_name
 #### Value : 
 This can have two values:
@@ -80,12 +80,11 @@ Rank Calculation: class which calculates Page Rank uses a damping factor 0.85.
 
 ## Job3: Output
 ### Job3_Mapper  
-
+Input:
 #### Key : Article_name 
 #### Value : Rank written by the context object
 
 This class is for Sorting (based on article name ) and sanitization. the output is written as <article name, rank>  
-
 
 
 ## Article
@@ -96,7 +95,7 @@ This is a driver class for all the above classes and it drives the aforementione
 
 
 
-The flow
+Flow of Operations
 ---------
 Main Class --> Job1_Mapper --> Job1_Reducer --> Job2_Mapper --> Job2_Reducer --> Job3_Mapper  --> Final Output
 

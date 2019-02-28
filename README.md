@@ -14,14 +14,14 @@ Our Solution :
 
 Class Description
 ------------------------
-##Job1_Mapper - 
+## Job1_Mapper - 
 
 Key : serializable int and Value :line by line from input text
 
 Parser Mapper which reads input from file line by line.The input is split based on white spaces and tabs using a string Tokenizer 
 which performs better than normal Split.
 
-##Job1_Reducer - 
+## Job1_Reducer - 
 
 Key : Article_name and Value : Initial Rank(1.0)+Outlinks+timestamp
 
@@ -29,7 +29,7 @@ Parser Reducer emits key value pair.
 the reducer also combines article_names (key) each key corresponds to values which is a list of outlinks with different dates. 
 The reducer gets the most updated article_name by comparing the dates with the input_date from the terminal
 
-##Job2_Mapper -
+## Job2_Mapper -
 
 Key : Article_name  and Value : Outlinks for the recent outlinks before timestamp
 
@@ -43,7 +43,7 @@ Key : Article_name and Value : // if it starts with # :Strings 0 # character, St
 
 Rank Calculation Reducer class which calculates Page Rank based considering damping factor 0.85.
 
-##Job3_Mapper - 
+## Job3_Mapper - 
 
 Key : Article_name  and Value : rank written by the context object
 
@@ -76,7 +76,7 @@ for example:
 hadoop finalMR.Main_class /user/enwiki/enwiki-20080103-sample.txt iter0 5 2008-01-01T00:00:00Z
 ~~~~
 
-####The final output will be stored in a file called result
+#### The final output will be stored in a file called result
 
 User should enter execute in the terminal in the following order :
 input file path, output path,(assumed non-existent), number of iterations for the PageRank algorithm (integer >= 1),

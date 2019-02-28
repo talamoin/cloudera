@@ -128,4 +128,4 @@ Performance
 
 6. We are using HashSet in stead of looping to remove duplicates.
 
-7. The number of reducers should not be static
+7. The number of reducers should not be static ( should be dynamically allocated depending on the input size )

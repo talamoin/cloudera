@@ -81,6 +81,7 @@ calculates Page Rank uses a damping factor (alpha) 0.85.
 
 <img src="http://www.sciweavers.org/tex2img.php?eq=rank%20%3D%20%20%5Cfrac%20%7B%5Calpha%7D%7BN%7D%20%2B%281-%20%5Calpha%20%29%20%20%5CSigma%20%20%5Cfrac%7Brank%7D%7BN%7D%20&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="rank =  \frac {\alpha}{N} +(1- \alpha )  \Sigma  \frac{rank}{N} " width="214" height="43" />
 
+
 ## Job3: Output
 ### Job3_Mapper  
 Input:

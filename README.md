@@ -5,10 +5,13 @@ it contains a Mapper class,Reducer class and a driver class which drives these c
 
 Goal
 ------
-Implement Page Rank algorithm as descibed below.
-Dataset : parsed version of Wikipedia Edit History in a tagged multi line format.
-Output : print article name followed by their Page Rank (separate line for each article).
-Format : Text (being written to a file)
+* Implement Page Rank algorithm as descibed below.
+
+* Dataset : parsed version of Wikipedia Edit History in a tagged multi line format.
+
+* Output : print article name followed by their Page Rank (separate line for each article).
+
+* Format : Text (being written to a file)
 
 
 How to Execute

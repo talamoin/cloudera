@@ -69,10 +69,12 @@ Input:
 ## Job2_Reducer  
 
 ### Key : Article_name
-### Value : if it starts with # :Strings 0 # character, String 1 outlinks
-	### if it doesnt start with # : String 0 article_name , String 1 old rank ,String 2 article_count
+### Value : 
+This can have two values:
+1. List of outlinks :if it starts with #: Strings 0 # character, String 1 outlinks
+2. An Article name with the contribution: if it doesnt start with # : String 0 article_name , String 1 old rank ,String 2 article_count
 
-Rank Calculation Reducer class which calculates Page Rank based considering damping factor 0.85.
+Rank Calculation: class which calculates Page Rank uses a damping factor 0.85.
 
 ## Job3: Output
 ## Job3_Mapper - 
@@ -84,9 +86,11 @@ This class is for Sorting (based on article name ) and sanitization. the output 
 
 
 
-Article - This class acts as getter and setter for timestamp and outlinks.
+## Article
+a class object - Three parameters : rank, timestamp, outlinks
 
-Main Class  - This is a driver class for all the above classes and it drives the aforementioned jobs. We define here input/ouput format etc.
+## Main_Class
+This is a driver class for all the above classes and it drives the aforementioned jobs. We define here input/ouput format etc.
 
 
 
@@ -95,7 +99,7 @@ The flow
 Main Class --> Job1_Mapper --> Job1_Reducer --> Job2_Mapper --> Job2_Reducer --> Job3_Mapper  --> Final Output
 
 Please note that Page rank calculation is an iterative process and is runas defined by number of iteration from command line.
-Job 2(Rank Calculator) has been made to execute as user defined number of iterations from the commandline(5 as suggested in coure work).
+Job 2(Rank Calculator) has been made to execute as user defined number of iterations from the commandline (5 as suggested in coure work).
 
 Assumptions
 -------------
@@ -114,13 +118,13 @@ Performance
 ---------------
 1. We can have more Mappers and read the file in chunks instead of line by line.
 
-2. We can avoid passing complex key value pairs from mapper to reducer so that we can minimize network I/O.
+2. We can avoid passing complex key value pairs from mapper to reducer by creating an InputFormat and that will minimize network overhead.
 
 3. We can also include Combiners to improve Reducer's job performance.
 
 4. We can simplify the task as much as possible before sending it to the Reducer.
 
-5. We have used String Tokenizer rather than String Split which improves performance.
+5. We have used String Tokenizer rather than String Split (in most cases) which improves performance.
 
 6. We are using HashSet in stead of looping to remove duplicates.
 

@@ -39,19 +39,21 @@ User should enter execute in the terminal in the following order :
 
 Class Description
 ------------------------
-## Job1_Mapper - Parser
-
-### Key : serializable int 
-### Value :line by line from input text
-
-Read Input File line by line, Compare timestamps, send only revisions with timestamp before the input date 
 
 ## Job1: Parser
 
-## Job1_Reducer
+### Job1_Mapper
+
+#### Key : serializable int 
+#### Value :line by line from input text
+
+Read Input File line by line, Compare timestamps, send only revisions with timestamp before the input date 
+
+
+### Job1_Reducer
 Input:
-### Key : Article_name
-### Value : Initial Rank(1.0)+Outlinks+timestamp
+#### Key : Article_name
+#### Value : Initial Rank(1.0)+Outlinks+timestamp
 
 Parser Reducer emits key value pair.
 the reducer also combines article_names (key) each key corresponds to values which is a list of outlinks with different dates. 
@@ -59,17 +61,17 @@ The reducer gets the most updated article_name by comparing the dates with the i
 
 ## Job2: Rank Calculations
 
-## Job2_Mapper 
+### Job2_Mapper 
 Input:
-### Key : Article_name  
-### Value : Outlinks for the recent outlinks before timestamp
+#### Key : Article_name  
+#### Value : Outlinks for the recent outlinks before timestamp
 
 
 
-## Job2_Reducer  
+### Job2_Reducer  
 
-### Key : Article_name
-### Value : 
+#### Key : Article_name
+#### Value : 
 This can have two values:
 1. List of outlinks :if it starts with #: Strings 0 # character, String 1 outlinks
 2. An Article name with the contribution: if it doesnt start with # : String 0 article_name , String 1 old rank ,String 2 article_count
@@ -77,10 +79,10 @@ This can have two values:
 Rank Calculation: class which calculates Page Rank uses a damping factor 0.85.
 
 ## Job3: Output
-## Job3_Mapper - 
+### Job3_Mapper  
 
-### Key : Article_name 
-### Value : Rank written by the context object
+#### Key : Article_name 
+#### Value : Rank written by the context object
 
 This class is for Sorting (based on article name ) and sanitization. the output is written as <article name, rank>  
 
